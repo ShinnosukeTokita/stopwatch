@@ -25,12 +25,22 @@ SECRET_KEY = "django-insecure-t5f-fcr!zwl2l0e)xa(3)+em*nm#wi+1lnc6#an+i$!wq%5#bx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+]
 
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        # 今回はログイン認証の方法としてSession認証を採用
+        "rest_framework.authentication.SessionAuthentication",
+    ]
+}
 
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -42,6 +52,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -131,6 +142,17 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+
+# 自身以外のオリジンのHTTPリクエスト内にクッキーを含めることを許可する
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = ["http://localhost:3000"]
+# アクセスを許可したいURL（アクセス元）を追加
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000"]
+# プリフライト(事前リクエスト)の設定
+# 30分だけ許可
+CORS_PREFLIGHT_MAX_AGE = 60 * 30
+# CSRFの設定
+# これがないと403エラーを返してしまう
+# https://docs.djangoproject.com/en/4.2/ref/settings/#csrf-trusted-origins
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000/"]
+# CSRF_COOKIE_HTTPONLY = False

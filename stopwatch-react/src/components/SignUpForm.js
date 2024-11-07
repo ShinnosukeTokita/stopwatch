@@ -2,37 +2,18 @@ import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../backend/AuthContext';
-import './LoginForm.css';
-// const API_HOST = 'http://localhost:3000';
 
-function LoginForm() {
+function SignUpForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // const [csrfToken, setCsrfToken] = useState('');
     const csrftoken = Cookies.get('csrftoken') || '';
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    // useEffect(() => {
-    //     const fetchCsrfToken = async () => {
-    //         try {
-    //             const response = await fetch(`${API_HOST}/csrf/`, {
-    //                 credentials: 'include'
-    //             });
-    //             const data = await response.json();
-    //             setCsrfToken(data.token);
-    //         } catch (e) {
-    //             console.error('Error fetching CSRF token:', e);
-    //         }
-    //     };
-
-    //     fetchCsrfToken();
-    // }, []);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch('/stopwatch/login/', {
+        const response = await fetch('/stopwatch/signup/', {
             method: 'POST',
             headers: {
                 'X-CSRFToken' : csrftoken,
@@ -49,7 +30,6 @@ function LoginForm() {
             login();
             navigate('/home');
         } else {
-            alert('メールアドレスまたはパスワードが間違っています')
             console.log(data.message);
         }
     };
@@ -71,11 +51,11 @@ function LoginForm() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="パスワード"
                 />
-                <button type="submit" className="login-button">ログイン</button>
+                <button type="submit" className="login-button">新規登録</button>
             </form>
         </div>
     );
 }
 
-export default LoginForm;
+export default SignUpForm;
 

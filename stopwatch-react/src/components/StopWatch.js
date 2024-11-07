@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import LogoutButton from './LogoutButton';
 
 function StopWatch() {
     const [time, setTime] = useState(0);
@@ -58,6 +59,7 @@ function StopWatch() {
                 </li>
             ))}
         </ul>
+        <LogoutButton />
     </>
     );
 }

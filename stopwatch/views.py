@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User
-from .serializers import LoginSerializer, RegisterSerializer
+from .serializers import LoginSerializer, SignUpSerializer
 
 
 @ensure_csrf_cookie
@@ -20,11 +20,11 @@ def PingView(request):
     return JsonResponse({"result": True})
 
 
-class RegisterView(APIView):
+class SignUpView(APIView):
     @staticmethod
     def post(request, *args, **kwargs):
         print(request.data)
-        serializer = RegisterSerializer(data=request.data)
+        serializer = SignUpSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             email = request.data.get("email")
             if User.objects.filter(email=email).exists():

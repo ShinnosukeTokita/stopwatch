@@ -1,14 +1,28 @@
-import Cookies from 'js-cookie';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../backend/AuthContext';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+const API_HOST = 'http://localhost:3000';
 
 function SignUpForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const csrftoken = Cookies.get('csrftoken') || '';
+    const [csrfToken, setCsrfToken] = useState('');
     const navigate = useNavigate();
-    const { login } = useAuth();
+
+    useEffect(() => {
+        const fetchCsrfToken = async () => {
+            try {
+                const response = await fetch(`${API_HOST}/csrf/`, {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                setCsrfToken(data.token);
+            } catch (e) {
+                console.error('Error fetching CSRF token:', e);
+            }
+        };
+
+        fetchCsrfToken();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,7 +30,7 @@ function SignUpForm() {
         const response = await fetch('/stopwatch/signup/', {
             method: 'POST',
             headers: {
-                'X-CSRFToken' : csrftoken,
+                'X-CSRFToken' : csrfToken,
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
@@ -24,13 +38,14 @@ function SignUpForm() {
         });
 
         const data = await response.json();
-        console.log('Response:', data);
+        // console.log('Response:', data);
 
-        if (response.status === 200) {
-            login();
-            navigate('/home');
+        if (response.status === 201) {
+            alert('ユーザを作成しました');
+            navigate('/login');
         } else {
             console.log(data.message);
+            alert('このメールアドレスはすでに使用されています')
         }
     };
 
@@ -53,6 +68,7 @@ function SignUpForm() {
                 />
                 <button type="submit" className="login-button">新規登録</button>
             </form>
+            <Link to="/login">ログインページへ</Link>
         </div>
     );
 }

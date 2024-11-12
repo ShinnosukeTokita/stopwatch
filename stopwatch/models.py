@@ -8,12 +8,13 @@ from django.utils import timezone
 
 class User(AbstractUser):
     email = models.EmailField(max_length=255, unique=True)
+    username = None
     first_name = None
     last_name = None
     date_joined = None
     groups = None
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    REQUIRED_FIELDS = []
 
 
 def in_30_days():

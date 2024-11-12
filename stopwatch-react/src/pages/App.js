@@ -1,8 +1,9 @@
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from '../backend/AuthContext';
 import LoginForm from '../components/LoginForm';
+import SignUpForm from '../components/SignUpForm';
 import StopWatch from "../components/StopWatch";
-import './App.css';
+import '../styles/App.css';
 
 function PrivateRoute({ element }) {
   const { isAuthenticated } = useAuth();
@@ -14,6 +15,7 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
+          <Route path='/signup' element={<SignUpForm />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/home" element={<PrivateRoute element={<StopWatch />} />} />
           <Route path="/" element={<LoginForm />} />

@@ -1,33 +1,31 @@
-import Cookies from 'js-cookie';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../backend/AuthContext';
-import './LoginForm.css';
-// const API_HOST = 'http://localhost:3000';
+import '../styles/LoginForm.css';
+const API_HOST = 'http://localhost:3000';
 
 function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // const [csrfToken, setCsrfToken] = useState('');
-    const csrftoken = Cookies.get('csrftoken') || '';
+    const [csrfToken, setCsrfToken] = useState('');
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    // useEffect(() => {
-    //     const fetchCsrfToken = async () => {
-    //         try {
-    //             const response = await fetch(`${API_HOST}/csrf/`, {
-    //                 credentials: 'include'
-    //             });
-    //             const data = await response.json();
-    //             setCsrfToken(data.token);
-    //         } catch (e) {
-    //             console.error('Error fetching CSRF token:', e);
-    //         }
-    //     };
+    useEffect(() => {
+        const fetchCsrfToken = async () => {
+            try {
+                const response = await fetch(`${API_HOST}/csrf/`, {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                setCsrfToken(data.token);
+            } catch (e) {
+                console.error('Error fetching CSRF token:', e);
+            }
+        };
 
-    //     fetchCsrfToken();
-    // }, []);
+        fetchCsrfToken();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -35,7 +33,7 @@ function LoginForm() {
         const response = await fetch('/stopwatch/login/', {
             method: 'POST',
             headers: {
-                'X-CSRFToken' : csrftoken,
+                'X-CSRFToken' : csrfToken,
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
@@ -43,7 +41,7 @@ function LoginForm() {
         });
 
         const data = await response.json();
-        console.log('Response:', data);
+        // console.log('Response:', data);
 
         if (response.status === 200) {
             login();
@@ -73,6 +71,7 @@ function LoginForm() {
                 />
                 <button type="submit" className="login-button">ログイン</button>
             </form>
+            <Link to="/signup">新規登録ページへ</Link>
         </div>
     );
 }

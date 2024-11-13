@@ -21,17 +21,16 @@ def PingView(request):
 
 
 class SignUpView(APIView):
-    @staticmethod
-    def post(request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = SignUpSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            email = request.data.get("email")
-            if User.objects.filter(email=email).exists():
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            else:
-                serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+
+        email = request.data.get("email")
+        if User.objects.filter(email=email).exists():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class LoginView(GenericAPIView):
@@ -40,16 +39,16 @@ class LoginView(GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.validated_data["user"]
-            email = user.email
-            refresh = RefreshToken.for_user(user)
-            return Response(
-                {
-                    "detail": "ログインが成功しました。",
-                    "refresh": str(refresh),
-                    "access": str(refresh.access_token),
-                    "email": email,
-                }
-            )
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+
+        user = serializer.validated_data["user"]
+        email = user.email
+        refresh = RefreshToken.for_user(user)
+        return Response(
+            {
+                "detail": "ログインが成功しました。",
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+                "email": email,
+            }
+        )

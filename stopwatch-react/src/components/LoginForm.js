@@ -5,9 +5,9 @@ import '../styles/LoginForm.css';
 const API_HOST = 'http://localhost:3000';
 
 function LoginForm() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [csrfToken, setCsrfToken] = useState('');
+    const [email, setEmail] = useState(undefined);
+    const [password, setPassword] = useState(undefined);
+    const [csrfToken, setCsrfToken] = useState(undefined);
     const navigate = useNavigate();
     const { login } = useAuth();
 

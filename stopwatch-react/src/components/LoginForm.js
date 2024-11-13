@@ -41,7 +41,6 @@ function LoginForm() {
         });
 
         const data = await response.json();
-        // console.log('Response:', data);
 
         if (response.status === 200) {
             login();

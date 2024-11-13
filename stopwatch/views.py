@@ -23,7 +23,6 @@ def PingView(request):
 class SignUpView(APIView):
     @staticmethod
     def post(request, *args, **kwargs):
-        print(request.data)
         serializer = SignUpSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             email = request.data.get("email")

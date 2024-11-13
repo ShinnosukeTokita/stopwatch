@@ -38,7 +38,6 @@ function SignUpForm() {
         });
 
         const data = await response.json();
-        // console.log('Response:', data);
 
         if (response.status === 201) {
             alert('ユーザを作成しました');
@@ -58,6 +57,7 @@ function SignUpForm() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="メールアドレス"
+                    required
                 />
                 <input
                     type="password"
@@ -65,6 +65,7 @@ function SignUpForm() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="パスワード"
+                    required
                 />
                 <button type="submit" className="login-button">新規登録</button>
             </form>

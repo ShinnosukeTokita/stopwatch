@@ -27,16 +27,9 @@ class SignUpView(APIView):
         if serializer.is_valid(raise_exception=True):
             email = request.data.get("email")
             if User.objects.filter(email=email).exists():
-                return Response({"error": 3}, status=status.HTTP_400_BAD_REQUEST)
-
-            try:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            else:
                 serializer.save()
-            except Exception as e:
-                return Response(
-                    {"error": 11, "message": str(e)},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                )
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -54,10 +47,9 @@ class LoginView(GenericAPIView):
             return Response(
                 {
                     "detail": "ログインが成功しました。",
-                    "error": 0,
                     "refresh": str(refresh),
                     "access": str(refresh.access_token),
                     "email": email,
                 }
             )
-        return Response({"error": 1}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)

@@ -29,7 +29,7 @@ class AccessToken(models.Model):
     # アクセス日時
     access_datetime = models.DateTimeField(default=in_30_days)
 
-    def str(self):
+    def __str__(self):
         # メールアドレスとアクセス日時、トークンが見えるように設定
         dt = timezone.localtime(self.access_datetime).strftime("%Y/%m/%d %H:%M:%S")
         return self.user.email + "(" + dt + ") - " + self.token
